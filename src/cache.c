@@ -2010,6 +2010,13 @@ void log_query(unsigned int flags, char *name, union all_addr *addr, char *arg)
       name = arg;
       verb = daemon->addrbuff;
     }
+  else if (flags & F_NFTSET)
+    {
+      source = "nftset add";
+      dest = name;
+      name = arg;
+      verb = daemon->addrbuff;
+    }
   else
     source = "cached";
   

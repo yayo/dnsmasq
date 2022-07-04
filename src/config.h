@@ -115,6 +115,10 @@ HAVE_IPSET
     define this to include the ability to selectively add resolved ip addresses
     to given ipsets.
 
+HAVE_NFTSET
+    define this to include the ability to selectively add resolved ip addresses
+    to given nftables sets.
+
 HAVE_AUTH
    define this to include the facility to act as an authoritative DNS
    server for one or more zones.
@@ -175,6 +179,7 @@ RESOLVFILE
 #define HAVE_SCRIPT
 #define HAVE_AUTH
 #define HAVE_IPSET 
+#define HAVE_NFTSET
 #define HAVE_LOOP
 #define HAVE_DUMPFILE
 
@@ -275,12 +280,14 @@ HAVE_SOCKADDR_SA_LEN
 #   define HAVE_GETOPT_LONG
 #endif
 #define HAVE_SOCKADDR_SA_LEN
+#define NO_NFTSET
 
 #elif defined(__APPLE__)
 #define HAVE_BSD_NETWORK
 #define HAVE_GETOPT_LONG
 #define HAVE_SOCKADDR_SA_LEN
 #define NO_IPSET
+#define NO_NFTSET
 /* Define before sys/socket.h is included so we get socklen_t */
 #define _BSD_SOCKLEN_T_
 /* Select the RFC_3542 version of the IPv6 socket API. 
@@ -291,17 +298,20 @@ HAVE_SOCKADDR_SA_LEN
 #  define SOL_TCP IPPROTO_TCP
 #endif
 #define NO_IPSET
+#define NO_NFTSET
 
 #elif defined(__NetBSD__)
 #define HAVE_BSD_NETWORK
 #define HAVE_GETOPT_LONG
 #define HAVE_SOCKADDR_SA_LEN
+#define NO_NFTSET
 
 #elif defined(__sun) || defined(__sun__)
 #define HAVE_SOLARIS_NETWORK
 #define HAVE_GETOPT_LONG
 #undef HAVE_SOCKADDR_SA_LEN
 #define ETHER_ADDR_LEN 6 
+#define NO_NFTSET
  
 #endif
 
@@ -342,6 +352,10 @@ HAVE_SOCKADDR_SA_LEN
 
 #if defined(NO_IPSET)
 #undef HAVE_IPSET
+#endif
+
+#if defined (NO_NFTSET)
+#undef HAVE_NFTSET
 #endif
 
 #ifdef NO_LOOP
@@ -420,6 +434,10 @@ static char *compile_opts =
 "no-"
 #endif
 "ipset "
+#ifndef HAVE_NFTSET
+"no-"
+#endif
+"nftset "
 #ifndef HAVE_AUTH
 "no-"
 #endif
